@@ -1,0 +1,34 @@
+# Cocktail
+
+Cocktail produces markov chain bots
+
+## Usage
+
+```bash
+sbt assembly
+java -jar target/cocktail-assembly-<version>.jar <conf>
+```
+
+## Config
+
+```
+irc {
+ server="irc.example.com"
+ port=6667
+ rooms=[
+  "#test"
+ ]
+}
+
+markov {
+  corpus="./src/main/resources/corpus.txt"
+}
+
+bot {
+  nick="cocktail"
+  user="cocktail"
+  password="pass"
+  realname="Cocktail Bot"
+  alert-regex="tail"
+}
+```
