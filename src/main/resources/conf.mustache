@@ -1,0 +1,21 @@
+irc {
+  server="{{server}}"
+  port={{port}}
+  rooms=[
+  {{#rooms}}
+    "{{.}}",
+  {{/rooms}}
+  ]
+}
+
+markov {
+  corpus="{{corpus}}"
+}
+
+bot {
+  nickname="{{nickname}}"
+  username="{{username}}"
+  password="{{password}}"
+  realname="{{realname}}"
+  alert-regex="{{alertregex}}"
+}
