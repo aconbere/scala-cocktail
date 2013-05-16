@@ -23,7 +23,9 @@ class CocktailTemplateScope(
   val username:String,
   val password:String,
   val realname:String,
-  val alertregex:String,
+  val alertRegex:String,
+  val tickInitialDelay:String,
+  val tickDuration:String,
   val corpus:File,
   val _rooms:List[String]
 ) {
@@ -38,6 +40,8 @@ class Cocktail( val serverName:String
               , val password:String
               , val realName:String
               , val alertRegex:Option[String]
+              , val tickInitialDelay:Option[Int]
+              , val tickDuration:Option[Int]
               , val rooms:List[Room]
               , val markov:MarkovChain[String]
               )
@@ -63,6 +67,11 @@ extends ClassicBot {
     case PrivMsg(from, channel, alertPattern(_match)) =>
       respond(channel)
   }
+
+  override val tickConfig = Some(new TickConfig(tickInitialDelay milliseconds,
+                                                tickDuration milliseconds))
+
+  override def tick() = markov.generate(30)
 }
 
 object Cocktail {
@@ -94,6 +103,8 @@ object Cocktail {
       case "" => None
       case s:String => Some(s)
     }
+    val tickInitialDelay = conf.getInt("bot.tick-initial-delay") 
+    val tickDuration = conf.getInt("bot.tick-duration") 
 
     val whitespace = """\s+""".r
 
@@ -109,6 +120,8 @@ object Cocktail {
                           , password
                           , realName
                           , alertRegex
+                          , tickInitialDelay
+                          , tickDuration
                           , rooms
                           , markov)
 
@@ -143,6 +156,8 @@ object Main {
         val realname = opt[String]("realname", required=true)
         val corpus = opt[File]("corpus", required=true)(fileConverter)
         val alert = opt[String]("alert", required=false)
+        val tickInitialDelay = opt[String]("tick-initial-delay")
+        val tickDuration = opt[String]("tick-duration")
         val rooms = trailArg[List[String]](required=false)
       }
     }
@@ -171,6 +186,8 @@ object Main {
           Conf.create.password(),
           Conf.create.realname(),
           _alert,
+          Conf.create.tickInitialDelay(),
+          Conf.create.tickDuration(),
           Conf.create.corpus(),
           _rooms
         ))
