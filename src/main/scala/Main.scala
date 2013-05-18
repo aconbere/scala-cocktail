@@ -1,6 +1,6 @@
 package org.conbere.cocktail
 
-import org.rogach.scallop._;
+import org.rogach.scallop._
 import java.io.File
 
 import scala.language.reflectiveCalls
