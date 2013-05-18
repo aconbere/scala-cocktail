@@ -1,15 +1,43 @@
 # Cocktail
 
-Cocktail produces markov chain bots
+Cocktail produces and runs markov chain bots.
+
+## Building
+
+Cocktail uses sbt to build, it's helpful to have a fat jar for executables. So just run
+
+```shell
+sbt assembly
+```
+
+and it will generate `target/cocktail-assembly-<version>.jar`
 
 ## Usage
 
-```bash
-sbt assembly
-java -jar target/cocktail-assembly-<version>.jar <conf>
+First there's a helper for generating a well formed config
+
+```shell
+java -jar target/cocktail-assembly-<version>.jar create \
+  --server irc.example.com \
+  --port 6667 \
+  --nickname bot \
+  --username bot \
+  --password pass \
+  --realname "Bot Bot" \
+  --tick-interval 1000 \
+  --corpus ./my-line-based-corpus.txt \
+  > bot.conf
+```
+
+Once you have a well formed config, you can start up a new bot using the run command.
+
+```shell
+java -jar target/cocktail-assembly-<version>.jar run bot.conf
 ```
 
 ## Config
+
+The config uses typesafes Config library which can consume many formats, in this case I'm using their own modified json format.
 
 ```
 irc {
